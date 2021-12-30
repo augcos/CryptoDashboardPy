@@ -42,37 +42,36 @@ while True:
         orderBTC = float(row['Trading total'][0:12].replace(',',''))
         orderAlt = float(row['Executed'][0:12].replace(',',''))
         priceAlt = float(binanceData[binanceData['Pair']==row['Pair']].reset_index(drop=True)['CurrentPrice'])
+        tableAlts.at[row['Pair'], 'Current Price'] = priceAlt
+
 
         if row['Side']=='BUY':
-            tableAlts.at[row['Pair'], 'Invested BTC'] = tableAlts['Invested BTC'][row['Pair']] + orderBTC
             tableAlts.at[row['Pair'], 'Num Altcoin'] = tableAlts['Num Altcoin'][row['Pair']]  + orderAlt
+            tableAlts.at[row['Pair'], 'Invested BTC'] = tableAlts['Invested BTC'][row['Pair']] + orderBTC
 
-            tableAlts.at[row['Pair'], 'Last Purchasing Price'] = tableAlts['Invested BTC'][row['Pair']] / tableAlts['Num Altcoin'][row['Pair']]
-            tableAlts.at[row['Pair'], 'Avg Price'] = tableAlts['Invested BTC'][row['Pair']] / tableAlts['Num Altcoin'][row['Pair']]
-                                            
             tableAlts.at[row['Pair'], 'Current BTC'] = priceAlt * tableAlts['Num Altcoin'][row['Pair']]
             tableAlts.at[row['Pair'], 'Gained BTC'] = tableAlts['Current BTC'][row['Pair']] - tableAlts['Invested BTC'][row['Pair']]
-            tableAlts.at[row['Pair'], 'Gained %'] = str(rounding(100*tableAlts.at[row['Pair'], 'Gained BTC'] / tableAlts['Invested BTC'][row['Pair']])) +' %'
-            tableAlts.at[row['Pair'], 'Current Price'] = priceAlt
-
+            tableAlts.at[row['Pair'], 'Gained %'] = str(rounding(100*tableAlts['Gained BTC'][row['Pair']] / tableAlts['Invested BTC'][row['Pair']])) + ' %'
+            tableAlts.at[row['Pair'], 'Avg Price'] = tableAlts['Invested BTC'][row['Pair']] / tableAlts['Num Altcoin'][row['Pair']]
+            tableAlts.at[row['Pair'], 'Last Purchasing Price'] = tableAlts['Invested BTC'][row['Pair']] / tableAlts['Num Altcoin'][row['Pair']]
+                                            
+            
         elif row['Side']=='SELL':
             ratioAlt = orderAlt / tableAlts['Num Altcoin'][row['Pair']]
-            newGains = orderBTC - ratioAlt*tableAlts['Invested BTC'][row['Pair']]
+            tableAlts.at[row['Pair'], 'Consolidated Gains'] = tableAlts['Consolidated Gains'][row['Pair']] + orderBTC - ratioAlt*tableAlts['Invested BTC'][row['Pair']]
 
-            tableAlts.at[row['Pair'], 'Gained BTC'] = tableAlts['Gained BTC'][row['Pair']] - newGains
-            tableAlts.at[row['Pair'], 'Consolidated Gains'] = tableAlts['Consolidated Gains'][row['Pair']] + newGains
-
-            tableAlts.at[row['Pair'], 'Invested BTC'] = tableAlts['Invested BTC'][row['Pair']] - ratioAlt*tableAlts['Invested BTC'][row['Pair']]
             tableAlts.at[row['Pair'], 'Num Altcoin'] = tableAlts['Num Altcoin'][row['Pair']]  - orderAlt
+            tableAlts.at[row['Pair'], 'Invested BTC'] = tableAlts['Invested BTC'][row['Pair']] - ratioAlt*tableAlts['Invested BTC'][row['Pair']]
 
             tableAlts.at[row['Pair'], 'Current BTC'] = priceAlt * tableAlts['Num Altcoin'][row['Pair']]
+            tableAlts.at[row['Pair'], 'Gained BTC'] = tableAlts['Current BTC'][row['Pair']] - tableAlts['Invested BTC'][row['Pair']]
             tableAlts.at[row['Pair'], 'Last Selling Price'] = orderBTC / orderAlt
            
 
     tableAlts.dropna(inplace=True)
 
     os.system('clear')
-    print("\n**************************************** CriptoBoard ****************************************")
+    print("\n**************************************** CryptoBoard ****************************************")
     print('BTC Price: %.0f EUR / %.0f USD' %(float(binanceData[binanceData['Pair']=='BTCEUR']['CurrentPrice']), \
         float(binanceData[binanceData['Pair']=='BTCUSDT']['CurrentPrice'])))
     print('Invested BTC: %.4f BTC - Current BTC: %.4f BTC - Current gains: %.4f BTC - Current gain: %.2f' \
