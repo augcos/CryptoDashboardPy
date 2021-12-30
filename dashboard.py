@@ -83,8 +83,10 @@ while True:
     print('Consolidated BTC: %.4f BTC\n' %(tableAlts['Consolidated Gains'].sum()))
 
     tableAlts = tableAlts.drop(tableAlts[tableAlts['Invested BTC']<10/float(binanceData[binanceData['Pair']=='BTCEUR']['CurrentPrice'])].index)
-    printedTable = tableAlts.filter(['Invested BTC', 'Current BTC', 'Avg Price', 'Current Price', 'Gained BTC', 'Gained %'], axis=1)
+    printedTable = tableAlts.filter(['Invested BTC', 'Current BTC', 'Avg Price' ,'Current Price', 'Gained BTC', 'Gained %'], axis=1)
     printedTable = printedTable.sort_values(by='Invested BTC', ascending=False)
     print(printedTable)
 
-    time.sleep(1)
+    print('\nLast updated at {last_update}'.format(last_update = time.strftime("%m/%d/%Y %H:%M:%S",time.localtime())))
+
+    time.sleep(60)
