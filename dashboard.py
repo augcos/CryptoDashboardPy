@@ -27,7 +27,9 @@ def getPrices():
 
 
 ########################## Data analysis ###########################
-myOrders = pd.read_csv('myOrders.csv')
+path =os.path.dirname(os.path.realpath(__file__))
+path = os.path.join(path,'myOrders.csv')
+myOrders = pd.read_csv(path)
 myOrders = myOrders[::-1]
 myOrders = myOrders[(myOrders['Status'].isin(['FILLED', 'PARTIALLY_FILLED'])) & (myOrders['Pair'].str.contains('BTC')) & \
     (myOrders['Pair']!='BTCEUR') & (myOrders['Pair']!='BTCUSDT')].reset_index(drop=True)
