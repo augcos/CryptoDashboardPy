@@ -55,7 +55,7 @@ while True:
             tableAlts.at[row['Pair'], 'Gained BTC'] = tableAlts['Current BTC'][row['Pair']] - tableAlts['Invested BTC'][row['Pair']]
             tableAlts.at[row['Pair'], 'Gained %'] = str(rounding(100*tableAlts['Gained BTC'][row['Pair']] / tableAlts['Invested BTC'][row['Pair']])) + ' %'
             tableAlts.at[row['Pair'], 'Avg Price'] = tableAlts['Invested BTC'][row['Pair']] / tableAlts['Num Altcoin'][row['Pair']]
-            tableAlts.at[row['Pair'], 'Last Purchasing Price'] = tableAlts['Invested BTC'][row['Pair']] / tableAlts['Num Altcoin'][row['Pair']]
+            tableAlts.at[row['Pair'], 'Last Purchasing Price'] = orderBTC / orderAlt
                                             
             
         elif row['Side']=='SELL':
