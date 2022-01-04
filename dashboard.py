@@ -73,7 +73,7 @@ while True:
     print("\n**************************************** CryptoBoardPy ****************************************")
     print('BTC Price: %.0f EUR / %.0f USD' %(float(binanceData[binanceData['Pair']=='BTCEUR']['CurrentPrice']), \
         float(binanceData[binanceData['Pair']=='BTCUSDT']['CurrentPrice'])))
-    print('Invested BTC: %.4f BTC - Current BTC: %.4f BTC - Current gains: %.4f BTC - Current gain: %.2f' \
+    print('Invested BTC: %.4f BTC - Current BTC: %.4f BTC - Current gains: %.4f BTC - Current %: %.2f' \
         %(tableAlts['Invested BTC'].sum(), \
         tableAlts['Current BTC'].sum(), \
         tableAlts['Gained BTC'].sum(),  \
